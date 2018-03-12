@@ -5,7 +5,8 @@ export const pageCommon = {
       pageNo: 1,
       pageSize: 5,
       pageTotal: null,
-      total: null
+      total: null,
+      isEmpty: false
     }
   },
   mounted () {
@@ -37,25 +38,41 @@ export const pageCommon = {
     getList () {
       this.task = true
       // this.loadingList = true
-      this.$ajax.post(this.apiUrl, this.params).then((response) => {
-        // this.loadingList = false
-        console.log(response)
-        let mydata = response.data
-        if (mydata.code === '200') {
-          this.task = false
-          this.pageTotal = mydata.data.total || mydata.totalCount || mydata.data.totalCount
-          let myDatas = mydata.data.waitingSendSMSList || mydata.data.data || mydata.data.datas || mydata.data.userAccountDOList || mydata.data.buyers || mydata.data || mydata.data.chargeApplys
-          this.setList(myDatas)
-        } else {
-          this.$message({
-            message: mydata.message,
-            type: 'warning'
-          })
-        }
-      }).catch((error) => {
-        console.log(error)
-        this.$message.error('网络错误，刷新下试试')
-      })
+      this.$ajax
+        .post(this.apiUrl, this.params)
+        .then(response => {
+          // this.loadingList = false
+          console.log(response)
+          let mydata = response.data
+          if (mydata.code === '200') {
+            this.task = false
+            this.pageTotal =
+              mydata.data.total || mydata.totalCount || mydata.data.totalCount
+            let myDatas =
+              mydata.data.waitingSendSMSList ||
+              mydata.data.data ||
+              mydata.data.datas ||
+              mydata.data.userAccountDOList ||
+              mydata.data.buyers ||
+              mydata.data ||
+              mydata.data.chargeApplys
+            if (myDatas.length > 0) {
+              this.isEmpty = false
+            } else {
+              this.isEmpty = true
+            }
+            this.setList(myDatas)
+          } else {
+            this.$message({
+              message: mydata.message,
+              type: 'warning'
+            })
+          }
+        })
+        .catch(error => {
+          console.log(error)
+          this.$message.error('网络错误，刷新下试试')
+        })
     },
     isNull (val) {
       if (val) {
