@@ -9,68 +9,6 @@
         <router-view/>
       </div>
     </div>
-    <!-- 未认证 -->
-    <div class="confirm" v-if="this.userInfo.status===3" v-show="Nocertification">
-      <div class="cont">
-        <div class="top">
-          <i class="qiye"></i>
-          <div>
-            <p>请您先认证企业短信</p>
-            <!-- <p>若您已提交认证信息，请耐心等待平台审核</p> -->
-            <p>平台联系方式：
-              <span class="blue">1337384556552</span>
-            </p>
-          </div>
-        </div>
-        <div class="bottom">
-          <router-link :to="{name:'certification'}">
-            <span class="btn" @click="go">去认证</span>
-          </router-link>
-        </div>
-      </div>
-    </div>
-    <!-- 证人中 -->
-    <div class="confirm" v-if="this.userInfo.status===2">
-      <div class="cont">
-        <div class="top">
-          <i class="qiye"></i>
-          <div>
-            <!-- <p>请您先认证企业短信</p> -->
-            <p>您已提交认证信息，请耐心等待平台审核</p>
-            <p>平台联系方式：
-              <span class="blue">1337384556552</span>
-            </p>
-          </div>
-        </div>
-        <!-- <div class="bottom">
-          <router-link :to="{name:'certification'}">
-            <span class="btn">去认证</span>
-          </router-link>
-        </div> -->
-      </div>
-    </div>
-    <!-- 审核未通过 -->
-    <div class="confirm" v-if="this.userInfo.status===4" v-show="noPass">
-      <div class="cont">
-        <div class="top">
-          <i class="qiye"></i>
-          <div>
-            <p>您的认证不通过请修改后再提交</p>
-            <!-- <p>原因:营业执照不清晰</p> -->
-            <p>平台联系方式：
-              <span class="blue">1337384556552</span>
-            </p>
-          </div>
-        </div>
-        <div class="bottom">
-          <router-link :to="{name:'certificationChange'}">
-            <span class="btn" @click="change">去修改</span>
-          </router-link>
-        </div>
-      </div>
-    </div>
-    <!-- 遮罩层 -->
-    <div class="wrap" v-show="wrap"></div>
   </div>
 </template>
 <script type="text/ecmascript-6">
