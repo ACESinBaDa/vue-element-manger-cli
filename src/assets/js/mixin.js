@@ -1,7 +1,7 @@
 export const pageCommon = {
   data () {
     return {
-      pageSizeArray: [5, 10, 15, 20],
+      pageSizeArray: [5, 10, 20, 50, 100],
       pageNo: 1,
       pageSize: 5,
       pageTotal: null,
@@ -12,22 +12,11 @@ export const pageCommon = {
   mounted () {
     this.getList()
   },
-  watch: {
-    pageSize (newVal, oldVal) {
-      if (this.pageTotal > newVal) {
-        this.getList()
-        return false
-      }
-      if (this.pageTotal < oldVal) {
-        return false
-      }
-      this.getList()
-    }
-  },
   methods: {
     // 修改每页显示的数据数目
     handleSizeChange (val) {
       this.pageSize = val
+      this.getList()
     },
     // 设置pageNo
     handleCurrentChange (val) {
@@ -36,16 +25,10 @@ export const pageCommon = {
     },
     // 查看数据api
     getList () {
-      this.task = true
-      // this.loadingList = true
-      this.$ajax
-        .post(this.apiUrl, this.params)
-        .then(response => {
-          // this.loadingList = false
-          console.log(response)
+      this.$ajax.post(this.apiUrl, this.params)
+        .then((response) => {
           let mydata = response.data
           if (mydata.code === '200') {
-            this.task = false
             this.pageTotal =
               mydata.data.total || mydata.totalCount || mydata.data.totalCount
             let myDatas =
@@ -68,17 +51,10 @@ export const pageCommon = {
               type: 'warning'
             })
           }
-        })
-        .catch(error => {
+        }).catch((error) => {
           console.log(error)
           this.$message.error('网络错误，刷新下试试')
         })
-    },
-    isNull (val) {
-      if (val) {
-        return val
-      }
-      return '暂无数据'
     }
   }
 }

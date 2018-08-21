@@ -21,7 +21,7 @@ module.exports = {
       },
       "/ipApi": {
         // 获取ip地址
-        target: "http://freegeoip.net/json/",
+        target: "http://pv.sohu.com/cityjson",
         changeOrigin: true,
         pathRewrite: {
           "^/ipApi": ""

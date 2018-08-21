@@ -1,6 +1,6 @@
-// 用户登录信息
-export const userInfo = state => state.userInfo
-// 用户登录token
-export const userToken = state => state.userToken
-// 存储卖家信息地方
-export const sellerInfo = state => state.sellerInfo
+const getters = {
+  sidebar: state => state.app.sidebar,
+  userInfo: state => state.user.userInfo,
+  userToken: state => state.user.userToken
+}
+export default getters

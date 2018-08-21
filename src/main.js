@@ -8,12 +8,14 @@ import axios from './assets/js/http'
 import 'babel-polyfill'
 import './assets/stylus/index.styl'
 Vue.config.productionTip = false
-Vue.prototype.$ajax = axios
+Vue.prototype.$axios = axios
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
   store,
-  components: { App },
+  components: {
+    App
+  },
   template: '<App/>'
 })

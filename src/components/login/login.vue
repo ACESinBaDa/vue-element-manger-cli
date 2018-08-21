@@ -1,202 +1,148 @@
 <template>
   <div class="login">
-    <div class="logo">
-      <!-- <img src="../../assets/image/logob.png" alt="logo"> -->
-    </div>
-    <div class="cont">
-      <div class="board">
-        <h2>登&nbsp;录</h2>
-        <div class="inputCont" @keyup.13="login">
-          <div class="input">
-            <span class="el-icon-edit"></span>
-            <input type="text" placeholder="输入账号" v-model="username">
-          </div>
-          <div class="input">
-            <span class="el-icon-edit-outline"></span>
-            <input type="password" placeholder="输入登录密码" v-model="password">
-          </div>
-          <button @click="login">登&nbsp;录</button>
-          <!-- <h3>
-            <router-link :to="{name:'Password'}">
-              <span>忘记密码</span>
-            </router-link>
-            <router-link :to="{name:'reg'}">
-              <span style="margin-right:20px">注册</span>
-            </router-link>
-          </h3> -->
-        </div>
-      </div>
-    </div>
+    <loginBase>
+      <ul class="box" slot="box" @keyup.13="loginTest">
+        <li>
+          <h2 class="head">登 录</h2>
+          {{ sidebar }}
+        </li>
+        <li class="inputLi">
+          <el-input class="input-m" v-model="userPhone" placeholder="帐号"></el-input>
+        </li>
+        <li class="inputLi">
+          <el-input class="input-m" v-model="password" placeholder="密码" type="password"></el-input>
+        </li>
+        <li>
+          <b class="button-l" @click="loginTest">登 录</b>
+        </li>
+        <li class="goWhere">
+          <span class="left text-button" @click="$router.push({name: 'reg'})">去注册</span>
+          <span class="right text-button" @click="$router.push({name: 'forget'})">忘记密码</span>
+        </li>
+      </ul>
+    </loginBase>
   </div>
 </template>
 <script type="text/ecmascript-6">
+import LoginBase from '@/base/loginBase/loginBase'
+import { mapActions, mapGetters } from 'vuex'
 import md5 from 'md5'
-import { mapActions } from 'vuex'
 export default {
   name: 'login',
+  components: {
+    LoginBase
+  },
   data () {
     return {
-      username: '',
+      userPhone: '',
       password: '',
       ip: ''
     }
   },
+  computed: {
+    ...mapGetters([
+      'userInfo',
+      'sidebar'
+    ])
+  },
   methods: {
+    setCookie (name, value, day) {
+      let date = new Date()
+      date.setDate(date.getDate() + day)
+      document.cookie = name + '=' + value + ';expires=' + date
+    },
+    getCookie (name) {
+      let reg = RegExp(name + '=([^;]+)')
+      let arr = document.cookie.match(reg)
+      if (arr) {
+        return arr[1]
+      } else {
+        return ''
+      }
+    },
+    loginTest () {
+      if (this.userPhone === '') {
+        this.$message({
+          message: '请输入用户手机号',
+          type: 'warning'
+        })
+      } else if (this.password === '') {
+        this.$message({
+          message: '请输入密码',
+          type: 'warning'
+        })
+      } else {
+        this.login()
+      }
+    },
+    login () {
+      this.setSidebar(['123456'])
+      this.$axios.post('/seller/account/login', {
+        userName: this.userPhone,
+        password: md5(this.password),
+        domain: window.location.host
+        // ip: this.ip
+      }).then((data) => {
+        if (data.data.code === '200') {
+          this.setUserInfo(data.data.data)
+          this.$message({
+            message: '登录成功!',
+            type: 'success',
+            duration: 1500,
+            onClose: () => {
+              this.setCookie('__un__', this.userPhone, 30)
+              this.setCookie('__pw__', this.password, 30)
+              if (parseInt(this.userInfo.shopBindStatus) === 1) {
+                this.$router.push({ name: 'userCenter' })
+              } else {
+                this.$router.push({ name: 'bindShop' })
+              }
+            }
+          })
+        } else if (data.data.code === '1019') {
+          this.$message({
+            message: '您已在域名' + data.data.message + '注册, 请在该域名下登录',
+            type: 'warning'
+          })
+        }
+      })
+    },
     getIp () {
-      this.$ajax.get('/ipApi'
-      ).then((data) => {
-        if (data.status === 200 || data.statusText === 'OK') {
+      this.$ajax.get('/ipApi', {
+      }).then((data) => {
+        if (data.status === 200) {
           this.ip = data.data.ip
         }
       }).catch((err) => {
         console.error(err)
       })
     },
-    login () {
-      if (this.username === '' || this.password === '') {
-        this.$message({
-          message: '请输入正确用户名或密码',
-          type: 'warning'
-        })
-        return false
-      } else if (this.password.length < 6) {
-        this.$message({
-          message: '密码不少于6位',
-          type: 'warning'
-        })
-        return false
-      } else {
-        // 登录
-        this.$ajax.post('/api/platform/login', {
-          userName: this.username,
-          password: md5(this.password),
-          ip: this.ip
-        }).then((data) => {
-          if (data.data.code === '200') {
-            this.setUserInfo(data.data.data)
-            this.setUserToken(data.headers.accesstoken)
-            localStorage.setItem('__userNamePlat__', this.username)
-            localStorage.setItem('__userPw__', this.password)
-            this.$message({
-              message: '登录成功,页面跳转中...',
-              type: 'success',
-              onClose: () => {
-                this.$router.push({ path: '/home' })
-              }
-            })
-          } else {
-            this.$message({
-              message: data.data.message,
-              type: 'warning'
-            })
-          }
-        }).catch((err) => {
-          console.error(err)
-          this.$message.error('服务器错误！')
-        })
-      }
-    },
     ...mapActions([
       'setUserInfo',
-      'setUserToken'
+      'setSidebar'
     ])
   },
   mounted () {
-    this.getIp()
-    if (localStorage.getItem('__userNamePlat__')) {
-      this.username = localStorage.getItem('__userNamePlat__')
-    }
-    if (localStorage.getItem('__userPw__')) {
-      this.password = localStorage.getItem('__userPw__')
+    if (this.getCookie('__un__') && this.getCookie('__pw__')) {
+      this.userPhone = this.getCookie('__un__')
+      this.password = this.getCookie('__pw__')
     }
   }
 }
 </script>
-<style lang="stylus" scoped>
+<style lang="stylus" rel="stylesheet/stylus" scoped>
 .login
-  position fixed
-  min-width 800px
-  width 100%
-  height 100%
-  background #f8f8f8
-  .logo
-    color #ffffff
-    height 75px
-    padding 26px 45px
+  .box
+    margin-bottom 35px
+  .head
+    margin-bottom 32px
+  .inputLi
+    margin-bottom 16px
+  .goWhere
+    margin 32px 0
     overflow hidden
-    img
-      height 75px
+    .left
       float left
-      vertical-align middle
-    span
-      font-size 18px
-      line-height 33px
-      margin-left 12px
-      color #FF2933
-  .cont
-    display flex
-    justify-content space-around
-    align-content center
-    height calc(100% - 200px)
-    background linear-gradient(rgba(247, 181, 188, 1), rgba(242, 162, 170, 1))
-    .text
-      align-self center
-      font-size 24px
-      line-height 33px
-      color #ffffff
-    .board
-      align-self center
-      background #ffffff
-      border 1px solid #cccccc
-      box-shadow 0 1px 12px rgba(255, 255, 255, 0.5)
-      h2
-        font-size 24px
-        color #7c7c7c
-        line-height 60px
-        box-shadow 0 1px 0 #cfc9c9
-        text-align center
-      .inputCont
-        padding 30px
-        .input
-          width 310px
-          height 22px
-          border 1px solid #cccccc
-          padding 15px 8px
-          margin-bottom 16px
-          span
-            display inline-block
-            width 24px
-            height 24px
-            text-align center
-          input
-            width 250px
-            margin-left 15px
-            outline none
-            border none
-            font-size 16px
-            line-height 22px
-        button
-          width 100%
-          border none
-          outline none
-          line-height 52px
-          color #ffffff
-          font-size 16px
-          background #ff3341
-          cursor pointer
-          border-radius 2px
-          margin-bottom 16px
-          &:hover
-            background #ff3341
-          &:active
-            color white
-        h3
-          overflow hidden
-          span
-            font-size 12px
-            float right
-            line-height 38px
-            cursor pointer
-            &:hover
-              color red
+    .right
+      float right
 </style>

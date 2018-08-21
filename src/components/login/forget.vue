@@ -1,30 +1,26 @@
 <template>
-  <div class="reg">
+  <div class="forget">
     <loginBase>
       <ul class="box" slot="box">
         <li>
-          <h2 class="head">注 册</h2>
+          <h2 class="head">忘记密码</h2>
         </li>
         <li class="inputLi">
           <el-input class="input-m" v-model="userPhone" placeholder="手机号"></el-input>
         </li>
         <li class="inputLi">
-          <el-input class="input-s" v-model="msgCode" placeholder="验证码" type="number"></el-input>
+          <el-input class="input-s" v-model="msgCode" placeholder="验证码"></el-input>
           <b class="button-s" v-show="!isRuning" @click="getMsg">验证码</b>
           <b class="button-s gray" v-show="isRuning">{{ time }}s</b>
         </li>
         <li class="inputLi">
-          <el-input class="input-m" v-model="password" placeholder="密码" type="password"></el-input>
+          <el-input class="input-m" v-model="password" placeholder="新密码(6-20个字符)" type="password"></el-input>
         </li>
         <li class="inputLi">
-          <el-input class="input-m" v-model="qqNum" placeholder="QQ"></el-input>
-        </li>
-        <li class="inputLi">
-          <el-input class="input-m" v-model="wechatNum" placeholder="微信"></el-input>
-          <p class="fontSize-s">qq与微信便于我们的客服为您更好的服务</p>
+          <el-input class="input-m" v-model="rePassword" placeholder="确认新密码" type="password"></el-input>
         </li>
         <li>
-          <b class="button-l" @click="regTest">立即注册</b>
+          <b class="button-l" @click="sureReset">确认重置</b>
         </li>
         <li class="goWhere">
           <span class="right text-button" @click="$router.push({name: 'login'})">返回登录</span>
@@ -38,7 +34,7 @@ import LoginBase from '../base/loginBase/index'
 import { getMessage } from '../../assets/js/message.js'
 import md5 from 'md5'
 export default {
-  name: 'reg',
+  name: 'forget',
   mixins: [getMessage],
   components: {
     LoginBase
@@ -46,16 +42,15 @@ export default {
   data () {
     return {
       userPhone: '',
-      password: '',
       msgCode: '',
-      qqNum: '',
-      wechatNum: '',
+      password: '',
+      rePassword: '',
       isRuning: false,
       time: ''
     }
   },
   methods: {
-    regTest () {
+    sureReset () {
       if (this.userPhone === '') {
         this.$message({
           message: '请输入用户手机号',
@@ -68,53 +63,38 @@ export default {
         })
       } else if (this.password === '') {
         this.$message({
-          message: '请输入密码',
+          message: '请输入新密码',
+          type: 'warning'
+        })
+      } else if (this.rePassword === '') {
+        this.$message({
+          message: '请再次输入新密码',
+          type: 'warning'
+        })
+      } else if (this.password !== this.rePassword) {
+        this.$message({
+          message: '两次密码不一致',
           type: 'warning'
         })
       } else {
-        this.regNow()
+        this.forget()
       }
     },
-    regNow () {
-      let urlApi = ''
-      if (this.$route.query.si) {
-        urlApi = '/api/seller/account/sellerInvitorRegister'
-      } else if (this.$route.query.ii) {
-        urlApi = '/api/seller/account/register'
-      } else {
-        urlApi = '/api/seller/account/register'
-      }
-      this.$ajax.post(urlApi, {
+    forget () {
+      this.$ajax.post('/api/seller/account/resetPwd', {
         telephone: this.userPhone,
         code: this.msgCode,
-        type: 1,
-        password: md5(this.password),
-        qq: this.qqNum,
-        wechatNum: this.wechatNum,
-        domain: window.location.host,
-        inviteCode: this.$route.query.si || this.$route.query.ii || ''
+        type: 2,
+        password: md5(this.password)
       }).then((data) => {
         if (data.data.code === '200') {
           this.$message({
-            message: data.data.message,
+            message: '重置成功',
             type: 'success',
             onClose: () => {
-              localStorage.setItem('__isFirstReg__', 1)
               this.$router.push({ name: 'login' })
             }
           })
-        } else if (data.data.code === '1008') {
-          if (data.data.message === window.location.host) {
-            this.$message({
-              message: '您已注册, 请直接登录',
-              type: 'warning'
-            })
-          } else {
-            this.$message({
-              message: '您已在域名' + data.data.message + '注册过帐号',
-              type: 'warning'
-            })
-          }
         } else {
           this.$message({
             message: data.data.message,
@@ -143,7 +123,7 @@ export default {
 }
 </script>
 <style lang="stylus" rel="stylesheet/stylus" scoped>
-.reg
+.forget
   .box
     margin-bottom 35px
   .head
@@ -154,8 +134,6 @@ export default {
       background gray
     .button-s
       margin-left 10px
-    .fontSize-s
-      margin-top 8px
   .goWhere
     margin 32px 0
     overflow hidden
