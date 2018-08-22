@@ -1,10 +1,13 @@
-const notice = () =>
-  import(/* webpackChunkName: "notice" */ '@/components/other/notice')
+const Notice = () =>
+  import(/* webpackChunkName: "Notice" */ '@/pages/other/notice')
+
 const other = [{
   path: 'other/notice',
-  component: notice,
+  component: Notice,
   name: 'notice',
-  meta: { title: '发布公告' }
+  meta: {
+    title: '发布公告'
+  }
 }]
 
 export default other

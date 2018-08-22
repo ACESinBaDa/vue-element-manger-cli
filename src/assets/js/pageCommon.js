@@ -1,4 +1,4 @@
-export const pageCommon = {
+const pageCommon = {
   data () {
     return {
       pageSizeArray: [5, 10, 20, 50, 100],
@@ -58,3 +58,5 @@ export const pageCommon = {
     }
   }
 }
+
+export default pageCommon

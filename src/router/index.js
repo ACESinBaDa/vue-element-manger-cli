@@ -19,7 +19,7 @@ router.beforeEach((to, from, next) => {
   if (to.meta.title || to.params.message) {
     document.title = to.meta.title || to.params.message.title
   } else {
-    document.title = 'KB项目API'
+    document.title = '后台管理系统'
   }
   next()
 })

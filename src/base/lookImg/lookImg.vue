@@ -1,5 +1,5 @@
 <template>
-  <div class="lookImg" @click="close">
+  <div class="lookImg" v-if="show" @click="close">
     <img :src="imgUrl" alt="pic">
   </div>
 </template>
@@ -7,6 +7,7 @@
 export default {
   name: 'lookImg',
   props: {
+    show: Boolean,
     imgUrl: {
       type: String,
       default: ''
@@ -18,6 +19,7 @@ export default {
   },
   methods: {
     close () {
+      this.show = false
       this.$emit('close')
     }
   }
@@ -27,6 +29,7 @@ export default {
 .lookImg
   position fixed
   z-index 100
+  z-index 9999
   top 0
   left 0
   width 100%
@@ -40,4 +43,5 @@ export default {
     left 0
     margin auto
     max-width 800px
+    max-height 800px
 </style>
