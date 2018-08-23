@@ -21,6 +21,17 @@ let unLoadRouterArr = ['login', 'reg', 'forget']
 axios.interceptors.request.use((config) => {
   console.log(process.env.NODE_ENV)
   config.url = `/api${config.url}`
+  // 数据格式判断
+  if (config.isFormdata) {
+    config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
+    config.transformRequest = [(data) => {
+      let ret = ''
+      for (let it in data) {
+        ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
+      }
+      return ret
+    }]
+  }
   if (store.state.userInfo) {
     config.headers.accesstoken = store.state.userToken // 请求接口header参数添加
     config.headers.userAccountId = store.state.userInfo.sellerAccountId
@@ -77,6 +88,11 @@ axios.interceptors.response.use((res) => {
         } else {
           return false
         }
+      default:
+        ElementUI.Message({
+          message: '网络错误，请稍后再试！',
+          type: 'warning'
+        })
     }
     return false
   }
