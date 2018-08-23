@@ -34,8 +34,8 @@
   </div>
 </template>
 <script type="text/ecmascript-6">
-import LoginBase from '../base/loginBase/index'
-import { getMessage } from '../../assets/js/message.js'
+import LoginBase from '@/components/loginBase/index'
+import { getMessage } from '@/assets/js/message.js'
 import md5 from 'md5'
 export default {
   name: 'reg',

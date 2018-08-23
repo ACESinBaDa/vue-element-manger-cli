@@ -24,7 +24,7 @@
   </div>
 </template>
 <script type="text/ecmascript-6">
-import LoginBase from '@/base/loginBase/loginBase'
+import LoginBase from '@/components/loginBase/loginBase'
 import { mapActions, mapGetters } from 'vuex'
 import md5 from 'md5'
 export default {
