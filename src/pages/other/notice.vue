@@ -5,55 +5,48 @@
         <em class="btn-b">添加公告</em>
       </div>
     </div>
-    <div class="table">
-      <el-table :data="tableData" style="width: 100%">
-        <el-table-column prop="date" label="标题" align="center">
-          <template slot-scope="scope">
-            <div>
-              <span>哈哈哈哈</span>
-              <em class="import">最重要</em>
-            </div>
-          </template>
+    <tables :options="options" @setData="setData">
+      <el-table :data="tableData">
+        <el-table-column prop="date" label="日期" width="180">
         </el-table-column>
-        <el-table-column prop="name" label="摘要" align="center">
+        <el-table-column prop="name" label="姓名" width="180">
         </el-table-column>
-        <el-table-column prop="address" label="内容" show-overflow-tooltip align="center" width="150">
-        </el-table-column>
-        <el-table-column prop="address" label="发布时间" align="center">
-        </el-table-column>
-        <el-table-column label="操作" align="center">
-          <template slot-scope="scope">
-            <el-button @click="setImport" type="text" size="small">设置为最重要</el-button>
-            <el-button @click="dele" type="text" size="small">删除</el-button>
-          </template>
+        <el-table-column prop="address" label="地址">
         </el-table-column>
       </el-table>
-    </div>
-    <div class="pager">
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
-      </el-pagination>
-    </div>
+    </tables>
   </div>
 </template>
 <script type="text/ecmascript-6">
+import Tables from '@/components/tables/tables'
+import md5 from 'md5'
 export default {
   name: 'notice',
+  components: {
+    Tables
+  },
+  computed: {
+    options () {
+      return {
+        apiUrl: '/platform/account/login',
+        params: {
+          userName: '15658195723',
+          password: md5(123456)
+        }
+      }
+    }
+  },
   data () {
     return {
-      currentPage: 1,
-      tableData: [{
-        date: '2017-01-08',
-        name: 'sdafsasafsa',
-        address: 'fgsaasgadsasaddadasgas'
-      }]
+      tableData: []
     }
   },
   methods: {
-    handleSizeChange (val) {
-      console.log(`每页 ${val} 条`)
-    },
-    handleCurrentChange (val) {
-      console.log(`当前页: ${val}`)
+    setData (data) {
+      this.tableData = [{
+        name: '123',
+        type: '1'
+      }]
     }
   }
 }

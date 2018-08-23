@@ -143,6 +143,7 @@ export default {
     overflow hidden
     .left
       float left
+      color $mainColor
     .right
       float right
 </style>

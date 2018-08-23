@@ -1,5 +1,6 @@
 body, html
   height 100%
+  transition all 0.2s
   font-family PingFangSC-Regular, HelveticaNeue-Light, 'Helvetica Neue Light', 'Microsoft YaHei', sans-serif
   -ms-overflow-style none
   overflow -moz-scrollbars-none
@@ -12,88 +13,3 @@ input::-webkit-input-placeholder
   color #b4b4b4
   :-moz-placeholder, ::-moz-placeholder, :-ms-input-placeholder, ::-webkit-input-placeholder
     color #b4b4b4
-.pager
-  text-align right
-  padding 30px 0
-// 按钮组
-.small-btn
-  line-height 16px
-  border 1px solid #40B6FF
-  border-radius 3px
-  color #40B6FF
-  padding-left 6px
-  padding-right 6px
-  font-size 12px
-  cursor pointer
-  transition all 0.3s
-  &:hover
-    border 1px dashed #ff3341
-    color #ff3341
-.radius-btn
-  display inline-block
-  padding-left 16px
-  padding-right 16px
-  height 28px
-  line-height 28px
-  font-size 12px
-  border-radius 14px
-  background #40B6FF
-  color #ffffff
-  box-shadow 0 2px 6px rgba(64, 182, 255, 0.63)
-  &:hover
-    cursor pointer
-    opacity 0.8
-.btn
-  display inline-block
-  border-radius 4px
-  text-align center
-  font-size 14px
-  min-width 90px
-  line-height 36px
-  height 36px
-  background #40B6FF
-  color #ffffff
-  &:hover
-    opacity 0.8
-    cursor pointer
-.btn-b
-  display inline-block
-  border-radius 4px
-  border 1px solid #BAC6DC
-  text-align center
-  font-size 14px
-  min-width 90px
-  line-height 34px
-  height 34px
-  color #525F75
-  &:hover
-    opacity 0.8
-    color #40B6FF
-    cursor pointer
-// 提示状态组
-.tipSuccess
-  display inline-block
-  padding-left 16px
-  padding-right 16px
-  padding-top 5px
-  padding-bottom 5px
-  border-radius 4px
-  line-height 1
-  min-width 40px
-  border 1px solid #3377FF
-  color #3377FF
-  font-size 14px
-  background rgba(163, 211, 246, 0.4)
-.tipError
-  display inline-block
-  padding-left 16px
-  padding-right 16px
-  padding-top 5px
-  padding-bottom 5px
-  border-radius 4px
-  line-height 1
-  min-width 40px
-  border 1px solid #FF2933
-  color #FF2933
-  font-size 14px
-  background rgba(255, 141, 148, 0.4)
