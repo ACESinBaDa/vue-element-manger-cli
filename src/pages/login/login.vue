@@ -12,7 +12,7 @@
         <li class="inputLi">
           <el-input class="input-m" v-model="password" placeholder="密码" type="password"></el-input>
         </li>
-        <li>
+        <li class="buttons">
           <b class="button-l" @click="loginTest">登 录</b>
         </li>
         <li class="goWhere">
@@ -136,14 +136,37 @@ export default {
     margin-bottom 35px
   .head
     margin-bottom 32px
+    font-size 20px
+    color #444444
+    line-height 1
+    text-align center
   .inputLi
     margin-bottom 16px
+  .buttons
+    // margin 40px 0
+    b
+      width 300px
+      display inline-block
+      cursor pointer
+      text-align center
+      line-height 40px
+      font-size 16px
+      color #ffffff
+      background #ff3341
+      border-radius 4px
+      transition all 0.3s
+      &:hover
+        opacity 0.8
+      &:active
+        background #ff3341
   .goWhere
     margin 32px 0
     overflow hidden
+    font-size 14px
+    >span
+      cursor pointer
     .left
       float left
-      color $mainColor
     .right
       float right
 </style>
