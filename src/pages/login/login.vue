@@ -76,7 +76,6 @@ export default {
       }
     },
     login () {
-      this.setSidebar(['123456'])
       this.$axios.post('/seller/account/login', {
         userName: this.userPhone,
         password: md5(this.password),
