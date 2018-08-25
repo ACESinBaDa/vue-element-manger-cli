@@ -72,6 +72,15 @@ export default {
     .rCont
       flex 1
       overflow auto
+    ::-webkit-scrollbar
+      width 8px
+      height 8px
+      display block
+    ::-webkit-scrollbar-thumb
+      border-radius 4px
+      background RGBA(136, 136, 136, 0.4)
+      &:hover
+        background RGBA(136, 136, 136, 1)
   .confirm
     position absolute
     top 0
