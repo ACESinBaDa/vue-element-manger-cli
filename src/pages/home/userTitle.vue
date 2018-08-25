@@ -1,45 +1,20 @@
 <template>
   <div class="userTitle">
     <div class="cont">
-      <div>
-        <span class="record" v-if="userInfo.status===2">
-          <i class="iconfont icon-qi"></i>
-          <strong>认证中</strong>
-        </span>
-        <router-link :to="{name:'sucessChange'}">
-          <span class="record" v-if="userInfo.status===1">
-            <i class="iconfont icon-qi1"></i>
-            <strong>已认证</strong>
-          </span>
-        </router-link>
-        <span class="record" v-if="userInfo.status===4">
-          <i class="iconfont icon-qi2"></i>
-          <strong>认证驳回</strong>
-        </span>
-        <span class="record" v-if="userInfo.status===3">
-          <i class="iconfont icon-qi2"></i>
-          <strong>未认证</strong>
-        </span>
-      </div>
-      <!-- <div class="price">
-        <span>余额:￥120.2</span>
-        <span>圆通:￥1元/单</span>
-        <em>充值</em>
-      </div> -->
-      <div class="info" @click="showInfo=!showInfo">
+      <div class="info" @mouseover="showInfo=true" @mouseout="showInfo=false">
         <b class="head">
           Y
         </b>
-        <span>{{ userInfo.telephone }}</span>
+        <span>{{ 'sinbada' }}</span>
         <a class="el-icon-arrow-down"></a>
         <transition :name="showInfo ? 'el-fade-in-linear' : 'el-fade-in'">
           <ul class="operate" :class="{ 'fadeIn': showInfo, 'fadeOut': !showInfo }" v-show="showInfo">
             <li @click="showPass=true">
               <i class="el-icon-edit-outline"></i>
-              <span>修改登录密码</span>
+              <span>修改密码</span>
             </li>
             <li @click="logout">
-              <i class="el-icon-upload2"></i>
+              <i class="el-icon-circle-close"></i>
               <span>退出登录</span>
             </li>
           </ul>
@@ -70,15 +45,12 @@
 </template>
 <script type="text/ecmascript-6">
 import { mapGetters } from 'vuex'
-import md5 from 'md5'
 export default {
   name: 'userTitle',
   data () {
     return {
-      showPass: false,
       showInfo: false,
-      task: false,
-      moneyObj: {},
+      showPass: false,
       fixPassObj: {
         oldpass: '',
         newpass1: '',
@@ -91,9 +63,6 @@ export default {
       'userInfo'
     ])
   },
-  // watch: {
-  //   '$route': 'getPrice'
-  // },
   methods: {
     logout () {
       this.$confirm('确认退出登录?', '提示', {
@@ -102,52 +71,11 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$router.push({ name: 'login' })
-      }).catch((err) => {
-        console.error(err)
       })
     },
     fixPass () {
-      this.$ajax.post('/api/user/changePwd', {
-        telephone: this.userInfo.telephone,
-        oldPwd: md5(this.fixPassObj.oldpass),
-        newPwd: md5(this.fixPassObj.newpass1),
-        repeatPwd: md5(this.fixPassObj.newpass2)
-      }).then((data) => {
-        if (data.data.code === '200') {
-          this.$message({
-            message: '修改成功',
-            type: 'success'
-          })
-          this.showPass = false
-        } else {
-          this.$message({
-            message: data.data.message,
-            type: 'warning'
-          })
-        }
-      }).catch(() => {
-        this.$message.error('服务器错误！')
-      })
-    },
-    getPrice () {
-      this.$ajax.post('/api/platform/getBalance', {
-        userAccountId: this.userInfo.platformAccountId
-      }).then((data) => {
-        if (data.data.code === '200') {
-          this.moneyObj = data.data.data
-        } else {
-          this.$message({
-            message: data.data.message,
-            type: 'warning'
-          })
-        }
-      }).catch(() => {
-        this.$message.error('服务器错误！')
-      })
+
     }
-  },
-  mounted () {
-    // this.getPrice()
   }
 }
 </script>
@@ -155,10 +83,11 @@ export default {
 .userTitle
   position relative
   z-index 998
-  height 60px
+  height 70px
   font-size 12px
-  background #ffffff
+  background #0A1727
   box-shadow 0 2px 0 #E8EBF0
+  color #ffffff
   .cont
     float right
     display flex
@@ -201,7 +130,7 @@ export default {
         font-weight bold
       .operate
         position fixed
-        top 60px
+        top 70px
         right 0
         z-index 999
         width 180px

@@ -163,6 +163,9 @@ export default {
     font-size 14px
     >span
       cursor pointer
+      transition all 0.1s
+      &:hover
+        color #ff3341
     .left
       float left
     .right
