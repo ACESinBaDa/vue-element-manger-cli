@@ -4,7 +4,6 @@
       <ul class="box" slot="box" @keyup.13="loginTest">
         <li>
           <h2 class="head">登 录</h2>
-          {{ sidebar }}
         </li>
         <li class="inputLi">
           <el-input class="input-m" v-model="userPhone" placeholder="帐号"></el-input>
