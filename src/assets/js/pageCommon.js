@@ -1,4 +1,4 @@
-const pageCommon = {
+export const pageCommon = {
   data () {
     return {
       pageSizeArray: [5, 10, 20, 50, 100],
@@ -7,6 +7,11 @@ const pageCommon = {
       pageTotal: null,
       total: null,
       isEmpty: false
+    }
+  },
+  computed: {
+    currentPage () {
+      return this.pageNo
     }
   },
   mounted () {
@@ -23,9 +28,13 @@ const pageCommon = {
       this.pageNo = val
       this.getList()
     },
+    search () {
+      this.pageNo = 1
+      this.getList()
+    },
     // 查看数据api
     getList () {
-      this.$ajax.post(this.apiUrl, this.params)
+      this.$axios.post(this.apiUrl, this.params)
         .then((response) => {
           let mydata = response.data
           if (mydata.code === '200') {
@@ -58,5 +67,3 @@ const pageCommon = {
     }
   }
 }
-
-export default pageCommon

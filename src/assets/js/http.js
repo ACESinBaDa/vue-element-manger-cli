@@ -5,8 +5,11 @@ import ElementUI, {
 } from 'element-ui'
 import router from '../../router'
 
+let rootApi = process.env.API_URL
+
 // axios 超时配置
 axios.defaults.timeout = 40000
+axios.defaults.withCredentials = true // 允许请求发送cookie
 
 // 全屏加载中
 let load
@@ -19,8 +22,7 @@ let unLoadRouterArr = ['login', 'reg', 'forget']
 /* http 拦截器 */
 /* axios token验证 */
 axios.interceptors.request.use((config) => {
-  console.log(process.env.NODE_ENV)
-  config.url = `/api${config.url}`
+  config.url = `${rootApi + config.url}`
   // 数据格式判断
   if (config.isFormdata) {
     config.headers['Content-Type'] = 'application/x-www-form-urlencoded'

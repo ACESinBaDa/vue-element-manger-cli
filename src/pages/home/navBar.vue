@@ -5,12 +5,12 @@
     </div>
     <div class="router">
       <div class="routerBox" v-for="(item,index) in menus" :key="index" ref="routerBox">
-        <div class="title" :class="{ 'headActive': $route.path.indexOf(item.router) > 0 }">
+        <div class="title" @click="goWhere(item)" :class="{ 'headActive': $route.path.indexOf(item.router) > 0, 'titleActive': !item.children }">
           <i :class="item.icon" class="iconfont"></i>
           <span>{{ item.header }}</span>
         </div>
         <ul class="child">
-          <li @click="goWhere(m.router)" :class="{ 'active': $route.path.indexOf(m.router) > 0 }" v-for="(m, i) in item.children" :key="i">{{ m.header }}</li>
+          <li @click="goWhere(m)" :class="{ 'active': $route.path.indexOf(m.router) > 0 }" v-for="(m, i) in item.children" :key="i">{{ m.header }}</li>
         </ul>
       </div>
     </div>
@@ -30,14 +30,15 @@ export default {
           {
             icon: 'el-icon-menu',
             header: '总览',
-            router: 'overlook',
+            router: 'overview',
             children: [
               {
-                header: '首页',
+                header: '业务概述',
                 router: 'overview'
-              }, {
-                header: '数据详情',
-                router: 'dataDetail'
+              },
+              {
+                header: '我的消息',
+                router: 'message'
               }
             ]
           }
@@ -49,8 +50,10 @@ export default {
     }
   },
   methods: {
-    goWhere (router) {
-      this.$router.push({ name: router })
+    goWhere (item) {
+      if (!item.children) {
+        this.$router.push({ name: item.router })
+      }
     }
   }
 }
@@ -93,6 +96,21 @@ export default {
           vertical-align middle
         span
           vertical-align middle
+      .titleActive
+        cursor pointer
+        &:hover
+          position relative
+          color #ff3341
+          background #FFE4E6
+          transition all 0.3s
+          &:before
+            content ''
+            position absolute
+            left 0
+            top 0
+            width 5px
+            height 100%
+            background #ff3341
       .headActive
         position relative
         color #ff3341
